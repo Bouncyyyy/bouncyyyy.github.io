@@ -1,0 +1,92 @@
+--- 
+---
+
+/* prettier-ignore */
+@use 'main
+{%- if jekyll.environment == 'production' -%}
+  .bundle
+{%- endif -%}
+';
+
+/* append your custom style below */
+
+// shadowed block
+.block {
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    border: 2px solid #aeaeae56;
+    /* 蓝紫色边框 */
+    border-radius: 12px;
+    /* 圆角 */
+    background: #ffffff;
+    /* 浅灰背景 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    /* 阴影 */
+
+    line-height: 1.6;
+    color: #111827;
+    /* 默认深灰文字 */
+
+    > :first-child {
+        margin-top: 0;
+    }
+
+    > :last-child {
+        margin-bottom: 0;
+    }
+}
+
+/* 深色模式下优化 */
+html[data-mode="dark"] .block {
+    background: #1f2937;
+    /* 深灰背景 */
+    border-color: #aeaeae56;
+    /* 边框更亮一点 */
+    color: #e5e7eb;
+    /* 浅灰文字 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+
+.simple-table,
+.simple-table table {
+    border: 0 !important;
+    border-collapse: collapse;
+    /* 合并边框，消除任何缝隙 */
+    border-spacing: 0 !important;
+    /* 彻底去掉单元格间距 */
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* 去掉 thead/tbody/tfoot、行、单元格上可能被主题加的边框线 */
+.simple-table thead,
+.simple-table tbody,
+.simple-table tfoot,
+.simple-table tr,
+.simple-table th,
+.simple-table td {
+    border: 0 !important;
+    background-color: transparent !important;
+}
+
+/* 有些主题会用上下分隔线作为行分割，这里一并清理 */
+.simple-table tr,
+.simple-table th,
+.simple-table td {
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+    font-weight: normal !important;
+}
+
+/* 若 Chirpy 外面包了一个 table-wrapper，可将类加在 wrapper 上 */
+.table-wrapper.simple-table {
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.table-wrapper.simple-table table {
+    border: 0 !important;
+    border-collapse: collapse;
+    border-spacing: 0 !important;
+}
