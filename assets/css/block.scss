@@ -1,0 +1,37 @@
+
+// shadowed block
+.block {
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    border: 2px solid #aeaeae56;
+    /* 蓝紫色边框 */
+    border-radius: 12px;
+    /* 圆角 */
+    background: #ffffff;
+    /* 浅灰背景 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    /* 阴影 */
+
+    line-height: 1.6;
+    color: #111827;
+    /* 默认深灰文字 */
+
+    > :first-child {
+        margin-top: 0;
+    }
+
+    > :last-child {
+        margin-bottom: 0;
+    }
+}
+
+/* 深色模式下优化 */
+html[data-mode="dark"] .block {
+    background: #242c38;
+    /* 深灰背景 */
+    border-color: #aeaeae56;
+    /* 边框更亮一点 */
+    color: #e5e7eb;
+    /* 浅灰文字 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}

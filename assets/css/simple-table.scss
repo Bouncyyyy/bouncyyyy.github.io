@@ -1,0 +1,43 @@
+
+.simple-table,
+.simple-table table {
+    border: 0 !important;
+    border-collapse: collapse;
+    /* 合并边框，消除任何缝隙 */
+    border-spacing: 0 !important;
+    /* 彻底去掉单元格间距 */
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* 去掉 thead/tbody/tfoot、行、单元格上可能被主题加的边框线 */
+.simple-table thead,
+.simple-table tbody,
+.simple-table tfoot,
+.simple-table tr,
+.simple-table th,
+.simple-table td {
+    border: 0 !important;
+    background-color: transparent !important;
+}
+
+/* 有些主题会用上下分隔线作为行分割，这里一并清理 */
+.simple-table tr,
+.simple-table th,
+.simple-table td {
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+    font-weight: normal !important;
+}
+
+/* 若 Chirpy 外面包了一个 table-wrapper，可将类加在 wrapper 上 */
+.table-wrapper.simple-table {
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.table-wrapper.simple-table table {
+    border: 0 !important;
+    border-collapse: collapse;
+    border-spacing: 0 !important;
+}
