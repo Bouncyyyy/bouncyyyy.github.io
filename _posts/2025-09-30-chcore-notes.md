@@ -4,6 +4,7 @@ title: ChCore literal notes
 description: SJTU ChCore 学习笔记
 category: ChCore
 tag: [OS, ChCore]
+mermaid: true
 timeline:
   - date: 2025-09-16
     desc: 添加对 Cap 机制的笔记
@@ -17,6 +18,26 @@ timeline:
 本 note 为个人学习 ChCore 中的一些笔记，内容主要参考 ChCore 源码和实验指导书，并结合个人理解进行整理，内容难免有误，欢迎指正
 
 > 本 note 不包含 Lab 任务内容，实验实现请参考 Lab Report 以及[个人实现](https://github.com/Bouncyyyy/SJTU-ChCore-Impl)
+
+## 内核启动
+
+启动部分只能用纯汇编实现，因为此时 C 语言依赖的栈等语境还未就绪
+
+在 QEMU 中，kernel 映像文件被 bootloader 加载到内存后，内核会从预先设置好的地址开始执行，在 ChCore 中即为 `_start` 函数(0x80000)
+
+> **启动地址的设置**
+>
+> TODO
+{: .block}
+
+### Primary
+
+多核环境下，多个 CPU 同时进行内核初始化会导致对一些共享数据的数据竞争，因此 ChCore 只允许 0 号核进行主初始化，其他核轮询直到 0 号核完成了必要的初始化
+
+> **控制内核启动行为**
+>
+>
+{: .block}
 
 ## 内存管理
 
@@ -56,11 +77,49 @@ Cap 的理解比较抽象，源码中对 Cap 的注释是这样描述的：
  */
 ```
 
-根据注释，Cap 分为两个方面：
+Cap 分为两个方面：
 1. 内核对象的具体权限，比如 `PMO_READ`, `PMO_WRITE`, `PMO_EXEC`, `PMO_COW`
 2. 一些通用权限，比如 `CAP_RIGHT_COPY` 和 `CAP_RIGHT_REVOKE_ALL`
 
-Cap 的粒度是 slot 级别的
+我们可以梳理一下 Cap 相关的 hierarchy(删去了不相关的成员和锁):
+```mermaid
+classDiagram
+cap_group --> slot_table : owns
+slot_table --> object_slot : contains
+object_slot --> cap_group : reference
+object_slot --> object : reference
+thread --> object : inherits
+thread --> cap_group : owns
+
+class cap_group{
+	struct slot_table slot_table;
+	struct list_head thread_list;   // 该 cap_group 的线程链表
+	badge_t badge;
+	int pid;
+	int notify_recycler;
+	void *attached_ptrace;
+	struct htable futex_entries;
+}
+class slot_table {
+	unsigned int slots_size;
+	struct object_slot **slots;
+	unsigned long *full_slots_bmp;
+	unsigned long *slots_bmp;
+}
+class object_slot {
+	int slot_id;
+	struct cap_group *cap_group;
+	struct object *object;  // slot 中的 object 对象引用
+	struct list_head copies; // 引用的 object 对象的 slot 链表
+	cap_right_t rights; // slot 对应的 Cap
+}
+class thread {
+    struct list_head node; // 同一个 cap_group 中的线程链表
+    struct thread *prev_thread;
+    struct cap_group *cap_group;
+    cap_t cap;  // 记录本线程在自己的 cap_group 中的位置
+}
+```
 
 ### 能力组的创建
 
