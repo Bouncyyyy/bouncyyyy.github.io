@@ -1,6 +1,6 @@
 ---
 layout: post
-title: ChCore literar notes
+title: ChCore literal notes
 description: SJTU ChCore 学习笔记
 category: ChCore
 tag: [OS, ChCore]
