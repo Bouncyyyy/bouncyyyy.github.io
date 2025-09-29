@@ -1,0 +1,39 @@
+{%- assign _groups = include.data | default: empty -%}
+{%- assign _event_label = include.event_label | default: "events" -%}
+{%- assign _extra_class = include.class | default: "" -%}
+
+{%- if _groups and _groups.size > 0 -%}
+<section class="c-timeline {{ _extra_class }}">
+  {%- for group in _groups -%}
+  <details class="tl-group" {% if group.open %}open{% endif %}>
+    <summary class="tl-group__summary">
+      <span class="tl-year">{{ group.year }}</span>
+      <span class="tl-count">{{ group.items | size }} {{ _event_label }}</span>
+    </summary>
+
+    <ol class="tl-list">
+      {%- for it in group.items -%}
+      <li class="tl-item">
+        {%- if it.date -%}
+          <time class="tl-time" datetime="{{ it.date }}">{{ it.label | default: it.date }}</time>
+        {%- else -%}
+          <span class="tl-time">{{ it.label }}</span>
+        {%- endif -%}
+
+        <div class="tl-content">
+          {%- if it.url -%}
+            <h4 class="tl-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h4>
+          {%- else -%}
+            <h4 class="tl-title">{{ it.title }}</h4>
+          {%- endif -%}
+          {%- if it.desc -%}
+            <p class="tl-desc">{{ it.desc }}</p>
+          {%- endif -%}
+        </div>
+      </li>
+      {%- endfor -%}
+    </ol>
+  </details>
+  {%- endfor -%}
+</section>
+{%- endif -%}

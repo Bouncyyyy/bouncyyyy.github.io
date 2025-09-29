@@ -1,0 +1,156 @@
+/* 可折叠时间线（原生 details/summary） */
+$c-tl-line:        hsl(220 10% 80%);
+$c-tl-dot:         hsl(220 90% 56%);
+$c-tl-text:        hsl(215 20% 20%);
+$c-tl-muted:       hsl(215 12% 40%);
+$c-tl-bg:          #fff;
+
+@media (prefers-color-scheme: dark) {
+  $c-tl-line:      hsl(220 10% 28%);
+  $c-tl-dot:       hsl(210 90% 62%);
+  $c-tl-text:      hsl(220 15% 90%);
+  $c-tl-muted:     hsl(220 10% 70%);
+  $c-tl-bg:        hsl(220 15% 10%);
+}
+
+.c-timeline {
+  margin-block: 1.5rem 2rem;
+  --tl-gap: 1.25rem;
+  --tl-pad: 0.75rem;
+  color: $c-tl-text;
+}
+
+/* 每个年份分组（可折叠） */
+.tl-group {
+  border-radius: 0.75rem;
+  border: 1px solid rgba(0,0,0,.06);
+  background: $c-tl-bg;
+  padding-inline: clamp(0.6rem, 2vw, 1rem);
+  padding-block: 0.4rem 0.6rem;
+  margin-block: 0.75rem;
+
+  @media (prefers-color-scheme: dark) {
+    border-color: rgba(255,255,255,.08);
+  }
+}
+
+/* summary 行（年份标题 + 计数） */
+.tl-group__summary {
+  list-style: none; /* 去掉默认三角的缩进 */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: var(--tl-pad);
+  cursor: pointer;
+  user-select: none;
+  font-weight: 600;
+
+  /* 自定义展开指示图标 */
+  &::-webkit-details-marker { display: none; }
+  position: relative;
+
+  &::after {
+    content: "";
+    inline-size: .6rem;
+    block-size: .6rem;
+    border-inline-end: 2px solid currentColor;
+    border-block-end: 2px solid currentColor;
+    transform: rotate(-45deg);
+    transition: transform .2s ease;
+    opacity: .7;
+  }
+}
+
+/* 展开时箭头翻转 */
+.tl-group[open] > .tl-group__summary::after {
+  transform: rotate(45deg);
+}
+
+/* 年份与计数 */
+.tl-year   { font-size: 1.05rem; letter-spacing: .2px; }
+.tl-count  { font-size: .9rem; color: $c-tl-muted; }
+
+/* 事件列表（竖线 + 节点） */
+.tl-list {
+  margin: 0;
+  padding: 0 0 0 calc(1.25rem + 12px); /* 留出竖线与圆点的空间 */
+  list-style: none;
+  position: relative;
+
+  /* 竖线 */
+  &::before {
+    content: "";
+    position: absolute;
+    inset-block: .25rem .25rem;
+    inset-inline-start: .6rem;
+    width: 2px;
+    background: $c-tl-line;
+    border-radius: 2px;
+  }
+}
+
+/* 单条事件 */
+.tl-item {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: .5rem var(--tl-gap);
+  padding: .75rem var(--tl-pad);
+
+  position: relative;
+
+  /* 圆点 */
+  &::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: .3rem;
+    inset-block-start: 1.1rem; /* 对齐时间文本中线 */
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: $c-tl-dot;
+    box-shadow: 0 0 0 3px color-mix(in srgb, $c-tl-dot 18%, transparent);
+  }
+
+  &:hover {
+    background: color-mix(in srgb, $c-tl-dot 6%, transparent);
+  }
+}
+
+/* 左列：时间 */
+.tl-time {
+  font: 600 0.88rem/1.2 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, PingFang SC, Noto Sans CJK SC, "Microsoft YaHei", sans-serif;
+  color: $c-tl-muted;
+  white-space: nowrap;
+  margin-top: .1rem;
+}
+
+/* 右列：内容 */
+.tl-content {
+  min-width: 0; /* 允许内部换行 */
+}
+
+.tl-title {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.tl-desc {
+  margin: .25rem 0 0;
+  font-size: .92rem;
+  line-height: 1.6;
+  color: $c-tl-muted;
+}
+
+/* 小屏优化 */
+@media (max-width: 520px) {
+  .tl-item {
+    grid-template-columns: 1fr;
+    padding-left: calc(var(--tl-pad) + .25rem);
+  }
+  .tl-time {
+    order: -1;
+    margin-bottom: .15rem;
+  }
+  .tl-list { padding-left: 1.6rem; }
+}
