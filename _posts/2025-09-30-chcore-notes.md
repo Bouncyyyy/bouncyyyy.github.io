@@ -5,12 +5,12 @@ description: SJTU ChCore 学习笔记
 category: ChCore
 tag: [OS, ChCore]
 mermaid: true
+timeline:
+  - date: 2025-09-16
+    desc: 添加对 Cap 机制的笔记
+  - date: 2025-09-27
+    desc: 添加对内存管理的笔记
 ---
-<!-- # timeline:
-#   - date: 2025-09-16
-#     desc: 添加对 Cap 机制的笔记
-#   - date: 2025-09-27
-#     desc: 添加对内存管理的笔记 -->
 
 # ChCore 学习笔记
 
