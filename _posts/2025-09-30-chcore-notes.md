@@ -10,6 +10,8 @@ timeline:
     desc: 添加对 Cap 机制的笔记
   - date: 2025-09-27
     desc: 添加对内存管理的笔记
+  - date: 2025-09-30
+    desc: 添加对内核启动的笔记
 ---
 
 # ChCore 学习笔记
@@ -31,14 +33,47 @@ timeline:
 > TODO
 {: .block}
 
-### Primary
+### Primary_init
 
 多核环境下，多个 CPU 同时进行内核初始化会导致对一些共享数据的数据竞争，因此 ChCore 只允许 0 号核进行主初始化，其他核轮询直到 0 号核完成了必要的初始化
 
-> **控制内核启动行为**
->
->
+> **控制 CPU 启动行为**
+> `_start` 开头有这么一段：
+> ```nasm
+> BEGIN_FUNC(_start)
+>   mrs x8, mpidr_el1
+>   and x8, x8, #0xFF
+>   cbz x8, primary
+>   ...
+> ```
+> 这里很明显，是对 `primary_init` 的逻辑控制，rtfm 后可以得到，`mpidr_el1` 低八位存储的是 CPU 的唯一标识，这样，我们可以通过判断 CPU ID 来决定当前核是否为 0 号核
 {: .block}
+
+`init_c` 是主要初始化函数，代码如下：
+```c
+void init_c(void) {
+	clear_bss();
+	early_uart_init();
+	wakeup_other_cores();
+	init_kernel_pt();
+	el1_mmu_activate();
+	start_kernel(secondary_boot_flag);
+}
+```
+该函数主要完成了以下工作：
+1. 清空 bss 段
+2. UART 串口初始化
+3. 初始化内核页表
+4. 启用 MMU
+5. 通知其他核并进入 `kernel_main`
+
+`start_kernel` 主要做了以下工作：
+1. 分配内核 C 需要的栈，设置 EL1 低地址空间页表基址寄存器 `ttbr0_el1`
+2. 跳转到 `main` 函数，启动内核并将 `secondary_boot_flag` 传递给 `main`
+
+### Secondary_init
+
+TODO
 
 ## 内存管理
 
