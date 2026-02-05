@@ -4,6 +4,7 @@
     --work-card-bg: #fff;
     --work-muted: #666;
     --work-shadow: 0 2px 12px rgba(0, 0, 0, .08);
+    --work-sep: rgba(0,0,0,.08);
   }
   
   .work-card {
@@ -46,12 +47,17 @@
   /* 分割线 */
   .work-sep {
     border: 0;
-    border-top: 1px solid rgba(0,0,0,.08);
+    border-top: 1px solid var(--work-sep);
     margin: 8px 0;
   }
   
   /* ===== Dark mode 适配（Chirpy 默认有 dark 主题类，可按你的站点配套选择器修改） ===== */
-  html.dark .work-card { background: #1f1f1f; }
-  html.dark .work-org,
-  html.dark .work-note { color: #bdbdbd; }
-  html.dark .work-sep { border-top-color: rgba(255,255,255,.12); }
+  html.dark,
+  html[data-mode="dark"],
+  html[data-theme="dark"] {
+    --work-accent: #a144c9;
+    --work-card-bg: #1f242e;
+    --work-muted: #bdbdbd;
+    --work-shadow: 0 2px 12px rgba(0, 0, 0, .45);
+    --work-sep: rgba(255,255,255,.12);
+  }

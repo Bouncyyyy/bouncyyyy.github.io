@@ -32,4 +32,18 @@ toc: true
 
 > ## Awards
 >
+> <div class="work-card">
+>   <div class="work-item">
+>     <span class="work-badge">2023.11</span>
+>     <span class="work-org">Ruli Scholarship</span>
+>   </div>
+>   <div class="work-item">
+>     <span class="work-badge">2024.12</span>
+>     <span class="work-org">People's Scholarship First Prize</span>
+>   </div>
+>   <div class="work-item">
+>     <span class="work-badge">2025.12</span>
+>     <span class="work-org">People's Scholarship First Prize</span>
+>   </div>
+> </div>
 {: .block }
